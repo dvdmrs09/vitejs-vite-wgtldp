@@ -1,24 +1,34 @@
-import './style.css'
-import viteLogo from '/vite.svg'
-import javascriptLogo from './javascript.svg'
-import { setupCounter } from './counter.js'
+import 'vite/modulepreload-polyfill';
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+// Styles
 
-setupCounter(document.querySelector('#counter'))
+// Vue
+import { createApp } from 'vue';
+
+// If you are build a SPA with a single <div id="app"></div> entry you would:
+// import App from './App.vue'
+// createApp(App).mount('#app')
+
+// The example here is to have multiple Vue apps sprinkled throughout your page
+// So we would instantiate any known components by their own
+
+// First let's load all components that should be available to in-browser template compilation
+
+// Example of how to import **all** components
+// https://dev.to/jakedohm_34/auto-registering-all-your-components-in-vue-3-with-vite-4884
+
+// if importing all is too much you can always do it manually
+// import HelloWorld from './components/HelloWorld.vue'
+// const components = {
+//   HelloWorld,
+// }
+
+// instantiate the Vue apps
+// Note our lookup is a wrapping div with .vue-app class
+
+for (const el of document.getElementsByClassName('vue-app')) {
+  createApp({
+    template: el.innerHTML,
+    components,
+  }).mount(el);
+}
